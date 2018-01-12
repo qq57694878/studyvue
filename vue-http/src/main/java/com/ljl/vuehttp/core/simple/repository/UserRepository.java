@@ -1,5 +1,4 @@
 package com.ljl.vuehttp.core.simple.repository;
-
 import com.ljl.vuehttp.core.simple.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

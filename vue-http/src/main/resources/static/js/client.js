@@ -33,7 +33,7 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
-                setJwtToken(data.token);
+                setJwtToken(data.data);
                 $login.hide();
                 $notLoggedIn.hide();
                 showTokenInformation();
@@ -80,7 +80,8 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
-            success: function (data, textStatus, jqXHR) {
+            success: function (obj, textStatus, jqXHR) {
+                var data =obj.data;
                 var $userInfoBody = $userInfo.find("#userInfoBody");
 
                 $userInfoBody.append($("<div>").text("Username: " + data.username));
@@ -155,7 +156,7 @@ $(function () {
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
-                showResponse(jqXHR.status, JSON.stringify(data));
+                showResponse(jqXHR.status, JSON.stringify(data.data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 showResponse(jqXHR.status, errorThrown);
@@ -170,7 +171,7 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
-                showResponse(jqXHR.status, data);
+                showResponse(jqXHR.status, data.data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 showResponse(jqXHR.status, errorThrown);

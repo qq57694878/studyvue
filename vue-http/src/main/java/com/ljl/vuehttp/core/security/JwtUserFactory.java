@@ -1,9 +1,9 @@
 package com.ljl.vuehttp.core.security;
 
+import com.ljl.vuehttp.core.simple.model.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.zerhusen.model.security.Authority;
-import org.zerhusen.model.security.User;
+import com.ljl.vuehttp.core.simple.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
