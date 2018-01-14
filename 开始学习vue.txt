@@ -1,2 +1,4 @@
 1.vue的官方文档
  https://cn.vuejs.org/v2/guide/
+2.element-ui是比较完整的vue组件库
+http://element.eleme.io/#/zh-CN/component/installation

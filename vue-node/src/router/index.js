@@ -1,15 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import Search from '@/components/Search'
+import Detail from '@/components/Detail'
+import Hello from '@/components/Hello'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Search',
+      component: Search
+    },
+    {
+      path: '/detail/:id',
+      name: 'Detail',
+      component: Detail
+    },
+    {
+      path: '/hello',
+      name: 'Hello',
+      component: Hello
     }
   ]
 })
