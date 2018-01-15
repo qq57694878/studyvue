@@ -3,23 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="css/element_ui.css">
+    <link rel="stylesheet" href="css/element-ui.css">
+    <style>
+        section {
+            margin: 50px 0;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
-    <el-button @click="visible = true">按钮</el-button>
-    <el-dialog :visible.sync="visible" title="Hello world">
-        <p>欢迎使用 Element</p>
-    </el-dialog>
-    <el-time-select
 
-            :picker-options="{
+    <section>
+        <h2>对话框</h2>
+        <el-button @click="visible = true">按钮</el-button>
+        <el-dialog :visible.sync="visible" title="Hello world">
+            <p>欢迎使用 Element</p>
+        </el-dialog>
+    </section>
+    <section>
+        <h2>按钮</h2>
+        <div>
+            <el-button>默认按钮</el-button>
+            <el-button type="primary">主要按钮</el-button>
+            <el-button type="success">成功按钮</el-button>
+            <el-button type="info">信息按钮</el-button>
+            <el-button type="warning">警告按钮</el-button>
+            <el-button type="danger">危险按钮</el-button>
+        </div>
+
+        <div style="margin: 20px 0">
+            <el-button plain>朴素按钮</el-button>
+            <el-button type="primary" plain>主要按钮</el-button>
+            <el-button type="success" plain>成功按钮</el-button>
+            <el-button type="info" plain>信息按钮</el-button>
+            <el-button type="warning" plain>警告按钮</el-button>
+            <el-button type="danger" plain>危险按钮</el-button>
+        </div>
+
+        <div>
+            <el-button round>圆形按钮</el-button>
+            <el-button type="primary" round>主要按钮</el-button>
+            <el-button type="success" round>成功按钮</el-button>
+            <el-button type="info" round>信息按钮</el-button>
+            <el-button type="warning" round>警告按钮</el-button>
+            <el-button type="danger" round>危险按钮</el-button>
+        </div>
+    </section>
+    <section>
+        <h2>日期时间</h2>
+        <el-time-select :picker-options="{
     start: '08:30',
     step: '00:15',
     end: '18:30'
   }"
-            placeholder="选择时间">
-    </el-time-select>
+                        placeholder="选择时间">
+        </el-time-select>
 
         <div class="block">
             <span class="demonstration">默认</span>
@@ -36,9 +74,14 @@
                     align="right"
                     type="date"
                     placeholder="选择日期"
-                    >
+            >
             </el-date-picker>
         </div>
+    </section>
+    <section>
+        <h2>
+            Carousel 走马灯
+        </h2>
         <div class="block">
             <span class="demonstration">默认 Hover 指示器触发</span>
             <el-carousel height="150px">
@@ -55,44 +98,50 @@
                 </el-carousel-item>
             </el-carousel>
         </div>
-
-    <el-table
-            :data="tableData"
-            style="width: 100%">
-        <el-table-column
-                label="日期"
-                width="180">
-            <template slot-scope="scope">
-                <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
-            </template>
-        </el-table-column>
-        <el-table-column
-                label="姓名"
-                width="180">
-            <template slot-scope="scope">
-                <el-popover trigger="hover" placement="top">
-                    <p>姓名: {{ scope.row.name }}</p>
-                    <p>住址: {{ scope.row.address }}</p>
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                    </div>
-                </el-popover>
-            </template>
-        </el-table-column>
-        <el-table-column label="操作">
-            <template slot-scope="scope">
-                <el-button
-                        size="mini"
-                        >编辑</el-button>
-                <el-button
-                        size="mini"
-                        type="danger"
-                         >删除</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
-    <div class="block">
+    </section>
+    <section>
+        <h2>表格</h2>
+        <el-table
+                :data="tableData"
+                style="width: 100%">
+            <el-table-column
+                    label="日期"
+                    width="180">
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                    <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="姓名"
+                    width="180">
+                <template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <p>姓名: {{ scope.row.name }}</p>
+                        <p>住址: {{ scope.row.address }}</p>
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                        </div>
+                    </el-popover>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                    >编辑
+                    </el-button>
+                    <el-button
+                            size="mini"
+                            type="danger"
+                    >删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </section>
+    <section>
+        <h2>分页</h2>
         <span class="demonstration">完整功能</span>
         <el-pagination
                 :current-page="4"
@@ -101,8 +150,10 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="400">
         </el-pagination>
-    </div>
-
+    </section>
+    <section>
+        <h2>Collapse 折叠面板</h2>
+    </section>
 
 
 </div>
@@ -127,12 +178,14 @@
 <!-- 先引入 Vue -->
 <script src="js/vue.js"></script>
 <!-- 引入组件库 -->
-<script src="js/element_ui.js"></script>
+<script src="js/element-ui.js"></script>
+<script src="js/element-ui-zh-CN.js"></script>
 <script>
     new Vue({
         el: '#app',
-        data: function() {
-            return { visible: false,
+        data: function () {
+            return {
+                visible: false,
                 tableData: [{
                     date: '2016-05-02',
                     name: '王小虎',

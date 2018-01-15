@@ -5,7 +5,9 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import '@/styles/index.scss' // global css
 import VueResource from 'vue-resource'
+import './permission' // permission control
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(VueResource)
@@ -16,4 +18,5 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+});
+

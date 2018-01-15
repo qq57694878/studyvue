@@ -38,7 +38,7 @@ public class AuthenticationRestController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @RequestMapping(value = "auth", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String,String> authenticationRequest, Device device) throws AuthenticationException {
 
         // Perform the security
