@@ -89,12 +89,13 @@
       },
       search(requestBody){
         this.$http.post('attachment/search.json', requestBody).then((response) => {
-
+          if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {
               this.page = responseJson.data;
               return;
             }
+          }
 
         }, (response) => {
           console.log(response);
