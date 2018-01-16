@@ -22,15 +22,22 @@ import java.util.List;
 public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
-    public RestResult findArticleByTitle(String title,Pageable pageRequest){
+    public Page<Article> findArticleByTitle(String title,Pageable pageRequest){
         Sort sort = new Sort(Sort.Direction.ASC,"id");
         Pageable pageable = new PageRequest(pageRequest.getPageNumber(),pageRequest.getPageSize(),sort);
-        Page<Article> page  =articleRepository.findAll(new Specification<Article>() {
+        return articleRepository.findAll(pageable);
+       /* Page<Article> page  =articleRepository.findAll(new Specification<Article>() {
             @Override
             public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-             return criteriaBuilder.and(criteriaBuilder.like(root.get("title"),"%" + title + "%"));
+                List<Predicate> predicates= new ArrayList<Predicate>();
+                if(title!=null&&title.length()>0){
+                    Predicate p = criteriaBuilder.like(root.get("title"),"%" + title + "%");
+                    predicates.add(p);
+                }
+
+             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         },pageable);
-        return new RestResult(page);
+        return page;*/
     }
 }

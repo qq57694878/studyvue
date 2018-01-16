@@ -5,29 +5,41 @@
     </div>
 
     <el-table
-      :data="page.list"
+      :data="page.content"
       style="width: 100%">
       <el-table-column
-        label="日期"
-        width="180">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="姓名"
+        label="标题"
         width="180">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
-            <p>姓名: {{ scope.row.name }}</p>
-            <p>住址: {{ scope.row.address }}</p>
+            <p>标题: {{ scope.row.title }}</p>
             <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.name }}</el-tag>
+              <el-tag size="medium">{{ scope.row.title }}</el-tag>
             </div>
           </el-popover>
         </template>
       </el-table-column>
+      <el-table-column
+        label="内容"
+        width="180">
+        <template slot-scope="scope">
+          <el-popover trigger="hover" placement="top">
+            <p>内容: {{ scope.row.content }}</p>
+            <div slot="reference" class="name-wrapper">
+              <el-tag size="medium">{{ scope.row.content }}</el-tag>
+            </div>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="创建日期"
+        width="180">
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.createDate }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -41,11 +53,12 @@
       </el-table-column>
     </el-table>
 
-    <div class="block" v-show="page.total>0">
+    <div class="block">
+      <span class="demonstration">完整功能</span>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="page.pageNum"
+        :current-page="page.pageNum-1"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -57,6 +70,9 @@
 </template>
 <script>
   export default {
+    created() {
+      this.handleCurrentChange(1);
+    },
     methods: {
       detailUrl(list){
         return  list.filter(function (item) {
@@ -88,20 +104,19 @@
         this.search(requestBody);
       },
       search(requestBody){
-        this.$http.post('attachment/search.json', requestBody).then((response) => {
+        this.$http.post('table/list.json', requestBody).then((response) => {
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {
               this.page = responseJson.data;
+              console.log(JSON.stringify(this.page));
               return;
             }
           }
-
         }, (response) => {
           console.log(response);
         });
       }
-
     },
     data() {
       return {

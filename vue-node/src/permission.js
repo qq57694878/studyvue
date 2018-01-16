@@ -1,5 +1,4 @@
 import router from './router'
-import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken,removeToken } from '@/utils/auth' // getToken from cookie
@@ -42,17 +41,3 @@ router.afterEach(() => {
 
 
 
-//配置路由权限
-Vue.http.interceptors.push(function(request, next) {
-  var token =getToken();
-  if(token){
-    request.headers.set('Authorization', 'Bearer '+token);
-  }
-  // continue to next interceptor
-  next(function(response) {
-    if(response.status ==401 ){
-      removeToken();
-      this.$router.push({ path: 'login' })
-    }
-  });
-});
