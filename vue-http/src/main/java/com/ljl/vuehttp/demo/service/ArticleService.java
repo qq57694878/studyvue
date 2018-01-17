@@ -25,8 +25,8 @@ public class ArticleService {
     public Page<Article> findArticleByTitle(String title,Pageable pageRequest){
         Sort sort = new Sort(Sort.Direction.ASC,"id");
         Pageable pageable = new PageRequest(pageRequest.getPageNumber(),pageRequest.getPageSize(),sort);
-        return articleRepository.findAll(pageable);
-       /* Page<Article> page  =articleRepository.findAll(new Specification<Article>() {
+/*        return articleRepository.findAll(pageable);*/
+        Page<Article> page  =articleRepository.findAll(new Specification<Article>() {
             @Override
             public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates= new ArrayList<Predicate>();
@@ -38,6 +38,6 @@ public class ArticleService {
              return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         },pageable);
-        return page;*/
+        return page;
     }
 }

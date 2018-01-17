@@ -6,6 +6,7 @@ import com.ljl.vuehttp.demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class TableController {
         return true;
     }
     @RequestMapping("table/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public RestResult listData(@RequestBody Map<String,String> requestMap){
         int pageNum=1;
         int pageSize =10;
@@ -38,7 +40,7 @@ public class TableController {
             }
         pageNum=pageNum-1;
         PageRequest pageRequest = new PageRequest(pageNum,pageSize);
-        Page<Article> page = articleService.findArticleByTitle(requestMap.get("title"),pageRequest);
+        Page<Article> page = articleService.findArticleByTitle(requestMap.get("word"),pageRequest);
          return new RestResult(page);
     }
 }

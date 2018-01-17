@@ -1,8 +1,16 @@
 <template>
   <div class="root">
-    <div class="searchbar">
-      <input  name="wd" class="s_ipt"  v-model="word" v-on:keyup.enter="handleSearch"/><el-button type="primary" @click="handleSearch">搜索</el-button>
-    </div>
+    <el-row :gutter="20">
+      <el-col :span="16">
+        <div class="searchbar">
+          <input  name="wd" class="s_ipt"  v-model="word" v-on:keyup.enter="handleSearch"/><el-button type="primary" @click="handleSearch">搜索</el-button>
+        </div>
+      </el-col>
+      <el-col :span="8" style="text-align:right">
+        <logout></logout>
+      </el-col>
+    </el-row>
+
 
     <el-table
       :data="page.content"
@@ -54,22 +62,24 @@
     </el-table>
 
     <div class="block">
-      <span class="demonstration">完整功能</span>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="page.pageNum-1"
+        :current-page="page.pageNum"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="page.total">
+        :total="page.totalElements">
       </el-pagination>
     </div>
+
   </div>
 
 </template>
 <script>
+  import logout from "@/components/Logout"
   export default {
+    components: {'logout': logout},
     created() {
       this.handleCurrentChange(1);
     },
@@ -116,6 +126,9 @@
         }, (response) => {
           console.log(response);
         });
+      },
+      logout(){
+
       }
     },
     data() {
@@ -124,12 +137,9 @@
         page: {
           "pageNum": 1,
           "pageSize": 10,
-          "size": 0,
-          "startRow": 0,
-          "endRow": 0,
-          "total": 0,
-          "pages": 0,
-          "list": [
+          "totalElements": 0,
+          "totalPages": 0,
+          "content": [
 
           ]
         }
