@@ -10,6 +10,7 @@ import VueResource from 'vue-resource'
 import { getToken,removeToken } from '@/utils/auth' // getToken from cookie
 import './permission' // permission control
 import './icons'
+import '@/utils/dateutil.js' // getToken from cookie
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(VueResource)

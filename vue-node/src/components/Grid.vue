@@ -12,12 +12,17 @@
     </el-row>
 
 
-    <el-table
+    <el-table border fit highlight-current-row
       :data="page.content"
       style="width: 100%">
-      <el-table-column
+      <el-table-column align="center" label="ID" width="65">
+        <template slot-scope="scope">
+          <span>{{scope.row.id}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="left"
         label="标题"
-        width="180">
+        width="300">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>标题: {{ scope.row.title }}</p>
@@ -27,9 +32,9 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column
-        label="内容"
-        width="180">
+      <el-table-column align="left"
+                       label="内容"
+        >
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>内容: {{ scope.row.content }}</p>
@@ -39,16 +44,16 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column
-        label="创建日期"
-        width="180">
+      <el-table-column align="center"
+                       label="创建日期"
+        width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.createDate }}</span>
+          <span style="margin-left: 10px">{{ scope.row.createDate | dateformat('yyyy-MM-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -72,6 +77,28 @@
         :total="page.totalElements">
       </el-pagination>
     </div>
+
+
+
+   <!--编辑和保存-->
+
+    <el-dialog title="文章" :visible.sync="dialogFormVisible">
+      <el-form :model="one">
+        <el-form-item label="标题" label-width="100">
+          <el-input v-model="one.title" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" label-width="100">
+          <el-input type="textarea" v-model="one.content"></el-input>
+        </el-form-item>
+        <el-form-item label="创建日期" label-width="100">
+          <el-input readonly v-model="one.createDate  " auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 
@@ -100,14 +127,69 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.page.pageNum=val;
         var requestBody={ pageNum:val,pageSize:this.page.pageSize,word:this.word};
         this.search(requestBody);
       },
       handleEdit(index, row) {
         console.log(index, row);
+        var params = row.id ;
+        this.$http.post('table/get.json', params).then((response) => {
+          var responseJson = response.body;
+          if (responseJson.errcode == 200) {
+             this.one = responseJson.data;
+            this.dialogFormVisible=true;
+            return;
+          }else{
+            this.$message({
+              type: 'info',
+              message: '获得文章信息失败！'
+            });
+          }
+        }, (response) => {
+          this.$message({
+            type: 'info',
+            message: '获得文章信息失败！'
+          });
+        });
+
       },
       handleDelete(index, row) {
         console.log(index, row);
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var params = row.id ;
+          this.$http.post('table/delete.json', params).then((response) => {
+              var responseJson = response.body;
+              if (responseJson.errcode == 200) {
+                console.log(JSON.stringify(this.page));
+                this.handleCurrentChange(this.page.pageNum);//刷新当前页
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                return;
+              }else{
+                this.$message({
+                  type: 'info',
+                  message: '删除失败！'
+                });
+              }
+          }, (response) => {
+            this.$message({
+              type: 'info',
+              message: '删除失败！'
+            });
+          });
+        }).catch(() => {
+        /*  this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });*/
+        });
       },
       handleSearch(){
         var requestBody={ pageNum:1,pageSize:this.page.pageSize,word:this.word};
@@ -118,7 +200,8 @@
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {
-              this.page = responseJson.data;
+              this.page.totalElements = responseJson.data.totalElements;
+              this.page.content = responseJson.data.content;
               console.log(JSON.stringify(this.page));
               return;
             }
@@ -138,10 +221,16 @@
           "pageNum": 1,
           "pageSize": 10,
           "totalElements": 0,
-          "totalPages": 0,
           "content": [
 
           ]
+        },
+        dialogFormVisible:false,
+        one:{
+          title:"",
+          content:"",
+          id:"",
+          createDate:""
         }
       };
     }
