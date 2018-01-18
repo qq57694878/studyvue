@@ -20,7 +20,7 @@
     methods: {
       init(){
         var requestBody={"id":id};
-        this.$http.post('article/findOne.json', requestBody).then((response) => {
+        this.$http.post('api/article/get.json', requestBody).then((response) => {
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {

@@ -82,7 +82,7 @@ export default {
      this.$refs.loginForm.validate(valid => {
        if (valid) {
          this.loading = true;
-         this.$http.post('auth/login', this.loginForm).then((response) => {
+         this.$http.post('api/auth/login', this.loginForm).then((response) => {
            setToken(response.body.data);
            this.loading = false;
            this.$router.push({ path: '/' })

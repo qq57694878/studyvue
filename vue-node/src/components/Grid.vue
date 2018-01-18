@@ -148,7 +148,7 @@
       },
       handleAdd(){//修改
         var params={id:this.one.id,title:this.one.title,content:this.one.content};
-        this.$http.post('table/add.json', params).then((response) => {
+        this.$http.post('api/table/add.json', params).then((response) => {
           var responseJson = response.body;
           if (responseJson.errcode == 200) {
             this.dialogFormVisible=false;
@@ -172,7 +172,7 @@
       },
       handleUpdate(){//修改
         var params={id:this.one.id,title:this.one.title,content:this.one.content};
-        this.$http.post('table/update.json', params).then((response) => {
+        this.$http.post('api/table/update.json', params).then((response) => {
           var responseJson = response.body;
           if (responseJson.errcode == 200) {
 
@@ -199,7 +199,7 @@
       openEdit(index, row) {
         console.log(index, row);
         var params = row.id ;
-        this.$http.post('table/get.json', params).then((response) => {
+        this.$http.post('api/table/get.json', params).then((response) => {
           var responseJson = response.body;
           if (responseJson.errcode == 200) {
              this.one = responseJson.data;
@@ -229,7 +229,7 @@
           type: 'warning'
         }).then(() => {
           var params = row.id ;
-          this.$http.post('table/delete.json', params).then((response) => {
+          this.$http.post('api/table/delete.json', params).then((response) => {
               var responseJson = response.body;
               if (responseJson.errcode == 200) {
                 console.log(JSON.stringify(this.page));
@@ -263,7 +263,7 @@
         this.search(requestBody);
       },
       search(requestBody){
-        this.$http.post('table/list.json', requestBody).then((response) => {
+        this.$http.post('api/table/list.json', requestBody).then((response) => {
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {
