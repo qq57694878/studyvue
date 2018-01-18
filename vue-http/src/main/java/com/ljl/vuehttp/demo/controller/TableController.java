@@ -1,6 +1,7 @@
 package com.ljl.vuehttp.demo.controller;
 
 import com.ljl.vuehttp.core.common.RestResult;
+import com.ljl.vuehttp.core.mapper.BeanMapperKit;
 import com.ljl.vuehttp.demo.model.Article;
 import com.ljl.vuehttp.demo.repository.ArticleRepository;
 import com.ljl.vuehttp.demo.service.ArticleService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -49,8 +51,8 @@ public class TableController {
     }
     @RequestMapping("table/get")
     @PreAuthorize("hasRole('ADMIN')")
-    public RestResult getOne(@RequestBody Long id){
-        Article article = articleRepository.getOne(id);
+    public RestResult findOne(@RequestBody Long id){
+        Article article = articleRepository.findOne(id);
         return new RestResult(article);
     }
     @RequestMapping("table/delete")
@@ -62,12 +64,16 @@ public class TableController {
     @RequestMapping("table/update")
     @PreAuthorize("hasRole('ADMIN')")
     public RestResult update(@RequestBody Article article){
-        articleRepository.save(article);
+        Article o = articleRepository.findOne(article.getId());
+        BeanMapperKit.copy(article,o);
+
+        articleRepository.save(o);
         return new RestResult("");
     }
     @RequestMapping("table/add")
     @PreAuthorize("hasRole('ADMIN')")
     public RestResult add(@RequestBody Article article){
+        article.setCreateDate(new Date());
         articleRepository.save(article);
         return new RestResult("");
     }

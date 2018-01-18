@@ -4,6 +4,7 @@
       <el-col :span="16">
         <div class="searchbar">
           <input  name="wd" class="s_ipt"  v-model="word" v-on:keyup.enter="handleSearch"/><el-button type="primary" @click="handleSearch">搜索</el-button>
+          <el-button @click="openAdd">添加</el-button>
         </div>
       </el-col>
       <el-col :span="8" style="text-align:right">
@@ -57,7 +58,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="openEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button
             size="mini"
             type="danger"
@@ -90,13 +91,15 @@
         <el-form-item label="内容" label-width="100">
           <el-input type="textarea" v-model="one.content"></el-input>
         </el-form-item>
-        <el-form-item label="创建日期" label-width="100">
-          <el-input readonly v-model="one.createDate  " auto-complete="off"></el-input>
+        <el-form-item label="创建日期" label-width="100" v-if="one.isupdate">
+            <el-date-picker   v-model="one.createDate" type="datetime"  format="yyyy-MM-dd HH:mm:ss" readonly>
+            </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleUpdate" v-if="one.isupdate">确 定</el-button>
+        <el-button type="primary" @click="handleAdd" v-if="one.isadd">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -131,13 +134,77 @@
         var requestBody={ pageNum:val,pageSize:this.page.pageSize,word:this.word};
         this.search(requestBody);
       },
-      handleEdit(index, row) {
+      clearOne(){
+        this.one.id="";
+        this.one.title="";
+        this.one.content="";
+        this.one.createDate="";
+      },
+      openAdd() {
+        this.clearOne();
+        this.one.isadd=true;
+        this.one.isupdate=false;
+        this.dialogFormVisible=true;
+      },
+      handleAdd(){//修改
+        var params={id:this.one.id,title:this.one.title,content:this.one.content};
+        this.$http.post('table/add.json', params).then((response) => {
+          var responseJson = response.body;
+          if (responseJson.errcode == 200) {
+            this.dialogFormVisible=false;
+            this.handleCurrentChange(this.page.pageNum);//刷新当前页
+            this.$message({
+              type: 'success',
+              message: '保存成功！'
+            });
+          }else{
+            this.$message({
+              type: 'info',
+              message: '保存失败！'
+            });
+          }
+        }, (response) => {
+          this.$message({
+            type: 'info',
+            message: '保存失败！'
+          });
+        });
+      },
+      handleUpdate(){//修改
+        var params={id:this.one.id,title:this.one.title,content:this.one.content};
+        this.$http.post('table/update.json', params).then((response) => {
+          var responseJson = response.body;
+          if (responseJson.errcode == 200) {
+
+            this.dialogFormVisible=false;
+            this.handleCurrentChange(this.page.pageNum);//刷新当前页
+            this.$message({
+              type: 'success',
+              message: '更新成功！'
+            });
+            return;
+          }else{
+            this.$message({
+              type: 'info',
+              message: '更新失败！'
+            });
+          }
+        }, (response) => {
+          this.$message({
+            type: 'info',
+            message: '更新失败！'
+          });
+        });
+      },
+      openEdit(index, row) {
         console.log(index, row);
         var params = row.id ;
         this.$http.post('table/get.json', params).then((response) => {
           var responseJson = response.body;
           if (responseJson.errcode == 200) {
              this.one = responseJson.data;
+            this.one.isupdate=true;
+            this.one.isadd=false;
             this.dialogFormVisible=true;
             return;
           }else{

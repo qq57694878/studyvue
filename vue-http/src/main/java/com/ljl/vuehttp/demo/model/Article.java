@@ -5,28 +5,28 @@ import com.ljl.vuehttp.core.simple.model.Authority;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "ARTICLE")
-public class Article {
+public class Article implements Serializable {
 
 
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_seq")
-    @SequenceGenerator(name = "article_seq", sequenceName = "article_seq", allocationSize = 1)
+    @SequenceGenerator(name = "article_seq", sequenceName = "article_seq", allocationSize = 102)
     private Long id;
 
-    @Column(name = "TITLE", length = 200)
+    @Column(name = "TITLE", length = 2000)
     @NotNull
-    @Size(min = 4, max = 50)
     private String title;
 
-    @Column(name = "CONTENT", length = 100)
+    @Column(name = "CONTENT", length = 4000)
     @NotNull
-    @Size(min = 4, max = 100)
+
     private String content;
 
 

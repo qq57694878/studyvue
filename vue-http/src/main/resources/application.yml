@@ -5,9 +5,11 @@ server:
 # JACKSON
 spring:
   jackson:
+    default-property-inclusion: non_null
     serialization:
       INDENT_OUTPUT: true
-      default-property-inclusion: non_null
+
+
 
 jwt:
   header: Authorization
