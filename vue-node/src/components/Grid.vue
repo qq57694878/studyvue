@@ -126,6 +126,7 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         var requestBody={ pageNum:this.page.pageNum,pageSize:val,word:this.word};
+        this.page.pageSize=val;
         this.search(requestBody);
       },
       handleCurrentChange(val) {
