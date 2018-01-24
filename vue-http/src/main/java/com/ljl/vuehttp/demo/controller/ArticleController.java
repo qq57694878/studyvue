@@ -6,11 +6,9 @@ import com.ljl.vuehttp.demo.model.Article;
 import com.ljl.vuehttp.demo.repository.ArticleRepository;
 import com.ljl.vuehttp.demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,7 @@ import java.util.Date;
 import java.util.Map;
 
 @RestController
-public class TableController {
+public class ArticleController {
     @Autowired
     private ArticleService articleService;
     @Autowired

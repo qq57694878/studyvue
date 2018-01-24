@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
-import store from '../store'
 import { getToken } from '@/utils/auth'
 
 // 创建axios实例
@@ -8,7 +7,8 @@ const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 15000 // 请求超时时间
 })
-
+axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8';
+service.defaults.headers.common['Authorization'] = "123";
 // request拦截器
 service.interceptors.request.use(config => {
   var token = getToken();
@@ -25,7 +25,7 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
   response => {
-    return response.data
+    return response
   },
   error => {
     console.log('err' + error)// for debug
@@ -34,8 +34,6 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     });
-    removeToken();
-    this.$router.push({ path: 'login' })
     return Promise.reject(error)
   }
 )

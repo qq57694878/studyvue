@@ -1,8 +1,9 @@
-import request from '@/utils/request'
+import http from '@/utils/request'
 
 export function login(username, password) {
-  return request({
-    url: '/user/login',
+  //return http.post('/auth/login',{username,password})
+  return http({
+    url: '/auth/login',
     method: 'post',
     data: {
       username,
@@ -12,16 +13,16 @@ export function login(username, password) {
 }
 
 export function getInfo(token) {
-  return request({
+  //return  http.get('/user/info')
+  return http({
     url: '/user/info',
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 
 export function logout() {
-  return request({
-    url: '/user/logout',
+  return http({
+    url: '/logout',
     method: 'post'
   })
 }
