@@ -12,26 +12,16 @@
     <script src="js/vue-router.js"></script>
 </head>
 <body >
-<div id="app">
-<el-container style="width:100%;height:100%; border: 1px solid #eee">
+<div id="app" >
+<el-container style=" border: 1px solid #eee">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu :default-openeds="['0','1','2']" >
-                    <el-menu-item :index="getIndex(index)" v-for="(item,index) in routes">  <router-link :to="item.path">{{item.name}}</router-link></el-menu-item>
+                    <el-menu-item :index="getIndex(index)" v-for="(item,index) in files">  <router-link :to="item.path">{{item.name}}</router-link></el-menu-item>
         </el-menu>
     </el-aside>
 
     <el-container>
-        <el-header style="text-align: right; font-size: 12px">
-            <el-dropdown>
-                <i class="el-icon-setting" style="margin-right: 15px"></i>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>查看</el-dropdown-item>
-                    <el-dropdown-item>新增</el-dropdown-item>
-                    <el-dropdown-item>删除</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <span>王小虎</span>
-        </el-header>
+
 
         <el-main>
             <router-view></router-view>
@@ -53,33 +43,70 @@
 </style>
 
 <script>
-    Vue.component('Page', {
-        // 声明 props
+    var Page =Vue.component('Page', {
         props: ['src'],
+        data: function () {
+            return {
+                filename:this.src+".html"
+            }
+        },
+        methods:{
+          /*  getSrc(){
+                var path =his.$route.path;
+                if(path.charAt(0)=='/'){
+                    return path.substr(1)+'.html'
+                }else{
+                    return path+'.html'
+                }
+            }*/
+        },
         // 就像 data 一样，prop 也可以在模板中使用
         // 同样也可以在 vm 实例中通过 this.message 来使用
-        template: '<div> <iframe :src="src"></iframe></div>'
+        template: '<div> <iframe :src="filename"onload="setIframeHeight(this)" frameborder="0" scrolling="auto" style="width:100%;height:1000px"></iframe></div>'
     })
+    // document.domain = "caibaojian.com";
+    function setIframeHeight(iframe) {
+        if (iframe) {
+           /* var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+            if (iframeWin.document.body) {
+                iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+            }*/
+            var iwindow = iframe.contentWindow;
+            var idoc = iwindow.document;
+            var height = Math.max(1000,idoc.body.offsetHeight,idoc.body.scrollHeight,idoc.body.clientHeight,document.body.clientHeight,document.body.offsetHeight);
+           iframe.height =height;
+
+           /* var iframeHeight = iframe.document.body.scrollHeight + 30 + "px";
+            iframe.style.height = iframeHeight;*/
+        }
+    };
+    const files=[
+        {
+            path: '/img',
+            name: 'img'
+        },
+        {
+            path: '/simple-step1',
+            name: 'simple-step1'
+        },
+        {
+            path: '/element-index',
+            name: 'element-index'
+        },
+        {
+            path: '/img',
+            name: 'img'
+        },
+    ]
 
     const routes = [
         {
-            path: '/',
-            name: 'Dashboard',
-            component: Page
 
-        },
+            path: '/:src',
+            name: 'router',
+            component: Page,
+            props: true
 
-        {
-            path: '/example',
-            name: 'Example',
-            component: Home
-
-        },
-
-        {
-            path: '/form',
-            name: 'Form',
-            component: About
         }
     ];
     // 3. 创建 router 实例，然后传 `routes` 配置
@@ -100,6 +127,7 @@
             return {
                 collapse:false,
                 routes:routes,
+                files:files,
                 tableData: Array(20).fill(item)
             }
         },
