@@ -34,7 +34,6 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        console.log("getInfo is run before");
         getInfo().then(response => {
           const data = response.data.data
           commit('SET_ROLES', data.roles)
@@ -50,6 +49,7 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout().then(() => {
+          console.log('logout end');
           commit('SET_ROLES', [])
           removeToken()
           resolve()

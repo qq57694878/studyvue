@@ -3,7 +3,7 @@
     <el-table :data="page.content" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label='ID' width="95">
         <template slot-scope="scope">
-          {{scope.$index}}
+          {{scope.row.id}}
         </template>
       </el-table-column>
       <el-table-column label="Title">
@@ -76,7 +76,8 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    var requestBody={ pageNum:this.page.pageNum,pageSize:this.page.pageSize};
+    this.fetchData(requestBody)
   },
   methods: {
     handleSizeChange(val) {

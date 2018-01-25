@@ -72,9 +72,6 @@ public class AuthenticationRestController {
         }
     }
 
-    @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        return ResponseEntity.ok(new RestResult(""));
-    }
+
 
 }

@@ -5,16 +5,17 @@
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img class="user-avatar" src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80">
+        <span class="user-name">{{name}}</span>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/">
           <el-dropdown-item>
-            Home
+            首页
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">LogOut</span>
+          <span @click="logout" style="display:block;">登出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -34,7 +35,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'name'
     ])
   },
   methods: {
@@ -43,6 +44,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
+        console.log("location.reload()");
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
@@ -80,6 +82,9 @@ export default {
         width: 40px;
         height: 40px;
         border-radius: 10px;
+      }
+      .user-name {
+        height:40px;
       }
       .el-icon-caret-bottom {
         position: absolute;

@@ -31,17 +31,17 @@ public class DocumentController {
         return true;
     }
     @RequestMapping("document/list")
-    public RestResult listData(){//@RequestBody Map<String,String> requestMap
+    public RestResult listData(@RequestBody Map<String,String> requestMap){//
         int pageNum=1;
         int pageSize =10;
-           /* String spageNum = String.valueOf(requestMap.get("pageNum"));
+            String spageNum = String.valueOf(requestMap.get("pageNum"));
             String spageSize =String.valueOf(requestMap.get("pageSize"));
             if(isnotnull(spageNum)){
                 pageNum = Integer.parseInt(spageNum);
             }
             if(isnotnull(spageSize)){
                 pageSize =Integer.parseInt(spageSize);
-            }*/
+            }
         pageNum=pageNum-1;
         PageRequest pageRequest = new PageRequest(pageNum,pageSize);
         Page<Document> page = documentRepository.findAll(pageRequest);
