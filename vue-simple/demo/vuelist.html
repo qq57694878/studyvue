@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+<div id="app1">
+    {{hello}}
+</div>
+<div id="app2">
+    <input type="text" v-model="val" @keyup.enter="add">
+    <ol>
+        <li v-for="(item,index) in list">
+            {{item}}
+            <button @click="list.splice(index,1)">X</button>
+        </li>
+    </ol>
+</div>
+<script>
+    var app1 = new Vue({
+        el:'#app1',
+        data:{
+            hello:"come on vue"
+        }
+    });
+    var app2 = new Vue({
+        el:'#app2',
+        data:{
+            val:'',
+            list:[]
+        },
+        methods:{
+            add:function(){
+                console.log(this.val);
+                this.list.push(this.val);
+                this.val='';
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
