@@ -10,6 +10,7 @@
     <script src="js/element-ui.js"></script>
     <script src="js/element-ui-zh-CN.js"></script>
     <script src="js/vue-router.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
 </head>
 <body >
 <div id="app" >
@@ -30,7 +31,12 @@
 </el-container>
 </div>
 
-<style>
+<style scoped>
+    html,body,#app{
+        width:100%;
+        height:100%;
+        overflow:hidden;
+    }
     .el-header {
         background-color: #B3C0D1;
         color: #333;
@@ -43,70 +49,84 @@
 </style>
 
 <script>
-    var Page =Vue.component('Page', {
-        props: ['src'],
-        data: function () {
-            return {
-                filename:this.src+".html"
-            }
-        },
-        methods:{
-          /*  getSrc(){
-                var path =his.$route.path;
-                if(path.charAt(0)=='/'){
-                    return path.substr(1)+'.html'
-                }else{
-                    return path+'.html'
-                }
-            }*/
-        },
-        // 就像 data 一样，prop 也可以在模板中使用
-        // 同样也可以在 vm 实例中通过 this.message 来使用
-        template: '<div> <iframe :src="filename"onload="setIframeHeight(this)" frameborder="0" scrolling="auto" style="width:100%;height:1000px"></iframe></div>'
-    })
-    // document.domain = "caibaojian.com";
-    function setIframeHeight(iframe) {
-        if (iframe) {
-           /* var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-            if (iframeWin.document.body) {
-                iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
-            }*/
-            var iwindow = iframe.contentWindow;
-            var idoc = iwindow.document;
-            var height = Math.max(1000,idoc.body.offsetHeight,idoc.body.scrollHeight,idoc.body.clientHeight,document.body.clientHeight,document.body.offsetHeight);
-           iframe.height =height;
 
-           /* var iframeHeight = iframe.document.body.scrollHeight + 30 + "px";
-            iframe.style.height = iframeHeight;*/
-        }
-    };
     const files=[
         {
-            path: '/img',
-            name: 'img'
+            path: '/demo/vuelist',
+            name: 'vue实现列表'
+        },
+        {
+            path: '/demo/vuelist',
+            name: 'vue实现列表'
+        },
+        {
+            path: '/demo/jquerylist',
+            name: 'jquery实现列表'
         },
         {
             path: '/simple-step1',
-            name: 'simple-step1'
+            name: '起步'
         },
         {
             path: '/element-index',
-            name: 'element-index'
+            name: 'elementui简单示例'
+        }
+
+    ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var Page =Vue.component('Page', {
+         data:function(){
+             return{
+
+             }
+         },
+        methods:{
+          getSrc:function(){
+              if(this.$route.path.substr(1)==0){
+                  return "welcome.html";
+              }
+              return this.$route.path.substr(1)+".html";
+          }
         },
-        {
-            path: '/img',
-            name: 'img'
-        },
-    ]
+        // 就像 data 一样，prop 也可以在模板中使用
+        // 同样也可以在 vm 实例中通过 this.message 来使用
+        template: '<div> {{getSrc()}} <iframe :src="getSrc()" onload="setIframeHeight(this)" frameborder="0" scrolling="auto" style="width:100%;"></iframe></div>'
+    });
+
+    // document.domain = "caibaojian.com";
+    function setIframeHeight(iframe) {
+        if (iframe) {
+            var height = Math.max($(window).height(),$(document).height(),$(document.body).height(),$(document.documentElement).height());
+            height=height-70;
+           console.log(height);
+           iframe.style.height =height+"px";
+        }
+    };
+
 
     const routes = [
         {
-
-            path: '/:src',
+            path: '*',
             name: 'router',
             component: Page,
-            props: true
-
         }
     ];
     // 3. 创建 router 实例，然后传 `routes` 配置
@@ -115,20 +135,17 @@
         routes // （缩写）相当于 routes: routes
     });
 
+
    var vue = new Vue ({
        el:'#app',
        router,
        data() {
-            const item = {
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            };
+
             return {
                 collapse:false,
                 routes:routes,
-                files:files,
-                tableData: Array(20).fill(item)
+                files:files
+
             }
         },
        methods:{
