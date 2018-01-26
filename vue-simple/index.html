@@ -49,11 +49,15 @@
 </style>
 
 <script>
-
+//这里让我们不断的丰富吧，path是文件的路径啊，但不用带html，name就是菜单名
     const files=[
         {
-            path: '/demo/vuelist',
-            name: 'vue实现列表'
+            path: '/demo/simple-step1',
+            name: '起步'
+        },
+        {
+            path: '/demo/component',
+            name: '最简单的一个组件'
         },
         {
             path: '/demo/vuelist',
@@ -63,15 +67,15 @@
             path: '/demo/jquerylist',
             name: 'jquery实现列表'
         },
+
         {
-            path: '/simple-step1',
-            name: '起步'
+            path: '/demo/element-index',
+            name: 'elementui简单示例'
         },
         {
-            path: '/element-index',
-            name: 'elementui简单示例'
+            path: '/demo/element-list',
+            name: 'element-ui列表'
         }
-
     ];
 
 
@@ -91,17 +95,12 @@
 
 
 
-
+//这里可能就不需要再动了，封装一个Page组件，带一个iframe，来加载我们自己写的单独的文件
     var Page =Vue.component('Page', {
-         data:function(){
-             return{
-
-             }
-         },
         methods:{
           getSrc:function(){
               if(this.$route.path.substr(1)==0){
-                  return "welcome.html";
+                  return "demo/welcome.html";
               }
               return this.$route.path.substr(1)+".html";
           }
@@ -111,7 +110,7 @@
         template: '<div> {{getSrc()}} <iframe :src="getSrc()" onload="setIframeHeight(this)" frameborder="0" scrolling="auto" style="width:100%;"></iframe></div>'
     });
 
-    // document.domain = "caibaojian.com";
+    // iframe得定一个高度
     function setIframeHeight(iframe) {
         if (iframe) {
             var height = Math.max($(window).height(),$(document).height(),$(document.body).height(),$(document.documentElement).height());
@@ -121,7 +120,7 @@
         }
     };
 
-
+    //所有的路由全部包含哈哈哈
     const routes = [
         {
             path: '*',
@@ -129,23 +128,21 @@
             component: Page,
         }
     ];
-    // 3. 创建 router 实例，然后传 `routes` 配置
+    // 1. 创建 router 实例，然后传 `routes` 配置
     // 你还可以传别的配置参数, 不过先这么简单着吧。
     const router = new VueRouter({
         routes // （缩写）相当于 routes: routes
     });
 
-
+  //vue实例的创建，开始托管dom吧
    var vue = new Vue ({
        el:'#app',
        router,
        data() {
-
             return {
                 collapse:false,
                 routes:routes,
                 files:files
-
             }
         },
        methods:{
@@ -156,7 +153,6 @@
                else{
                    return a+"";
                }
-
            }
        }
     });
