@@ -10,68 +10,123 @@
     </style>
 </head>
 <body>
+<div id="app">
+    <ul class="ztree">
+        <treeitem   v-for="(item,index) in zNodes"  :item-data="item" :index="index" :length="zNodes.length"></treeitem>
+    </ul>
 
 
-<ul class="ztree">
+</div>
+
+
+<script type="text/x-template" id="treeItemTemplate">
     <li>
-        <span id="treeDemo_1_switch" class="button switch roots_open"></span>
+        <span id="treeDemo_1_switch" class="button switch " :class="getClassSwitch()" @click="switchOpen()"></span>
         <a id="treeDemo_1_a" target="_blank">
-            <span id="treeDemo_1_ico" class="button ico_open"></span>
-            <span id="treeDemo_1_span" class="node_name">父节点1 - 展开</span>
+            <span id="treeDemo_1_ico" class="button " :class="getClassIco()"></span>
+            <span id="treeDemo_1_span" class="node_name">{{itemData.name}}</span>
         </a>
-        <ul id="treeDemo_1_ul"  style="display: block;">
-            <li id="treeDemo_2">
-                <span id="treeDemo_2_switch" class="button switch center_close"></span>
-                <a id="treeDemo_2_a" >
-                    <span id="treeDemo_2_ico" class="button ico_close" ></span>
-                    <span id="treeDemo_2_span" class="node_name">父节点11 - 折叠</span>
-                </a>
-                <ul id="treeDemo_2_ul"  style="display: none;">
-                    <li id="treeDemo_3" >
-                        <span id="treeDemo_3_switch" class="button switch center_docu" ></span>
-                        <a id="treeDemo_3_a" target="_blank">
-                            <span id="treeDemo_3_ico"class="button ico_docu"></span>
-                            <span id="treeDemo_3_span" class="node_name">叶子节点111</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
+        <ul id="treeDemo_1_ul" :class="{line:hasLine()}"  v-show="itemData.open" v-if="hasChildren()">
+            <treeitem   v-for="(item,index) in itemData.children"  :item-data="item" :index="index" :length="itemData.children.length"></treeitem>
         </ul>
     </li>
-</ul>
-
-
-<ul class="ztree">
-    <li v-for="(treeItem,index) in zNodes">
-        <span id="treeDemo_1_switch" class="button switch " :class="getClassSwitch(treeItem,index,zNodes.length)"></span>
-        <a id="treeDemo_1_a" target="_blank">
-            <span id="treeDemo_1_ico" class="button ico_open"></span>
-            <span id="treeDemo_1_span" class="node_name">{{treeItem.name}}</span>
-        </a>
-        <ul id="treeDemo_1_ul" class="line"  style="display: block;" v-show="!isLeaf(treeItem)">
-            <li id="treeDemo_2" v-for="(childItem,index) in treeItem.children">
-                <span id="treeDemo_2_switch" class="button switch "  :class="getClassSwitch(treeItem,index,zNodes.length)"></span>
-                <a id="treeDemo_2_a" >
-                    <span id="treeDemo_2_ico" class="button ico_close" ></span>
-                    <span id="treeDemo_2_span" class="node_name">父节点11 - 折叠</span>
-                </a>
-                <ul id="treeDemo_2_ul"  style="display: none;">
-                    <li id="treeDemo_3" >
-                        <span id="treeDemo_3_switch" class="button switch center_docu" ></span>
-                        <a id="treeDemo_3_a" target="_blank">
-                            <span id="treeDemo_3_ico"class="button ico_docu"></span>
-                            <span id="treeDemo_3_span" class="node_name">叶子节点111</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-        </ul>
-    </li>
-</ul>
+</script>
 
 <script>
+
+
+    Vue.component('treeitem',{
+       template:'#treeItemTemplate',
+        props:["itemData","index","length"],
+      methods:{
+           switchOpen:function(){
+               if(this.itemData.open){
+                   this.itemData.open=false;
+               }else{
+                   this.itemData.open=true;
+               }
+           },
+           hasLine:function(){
+               return this.index!==this.length-1
+           },
+          getClassIco:function(){
+              var ico_open=false;
+              var ico_close=false;
+              var ico_docu=false;
+              if(!this.hasChildren()){
+                  ico_docu=true;
+              }else{
+                  if(this.itemData.open){
+                      ico_open=true;
+                  }else{
+                      ico_close=true;
+                  }
+              }
+
+              return {
+                  "ico_open":ico_open,
+                  "ico_close":ico_close,
+                  "ico_docu":ico_docu
+              }
+          },
+          getClassSwitch:function(){
+              console.log(this.itemData+":"+this.index+":"+this.length);
+              var roots_open=false;
+              var center_open=false;
+              var bottom_open=false;
+              var roots_close=false;
+              var center_close=false;
+              var bottom_close=false;
+              var center_docu=false;
+              var bottom_docu=false;
+              if(!this.hasChildren()){
+                  if(this.index==this.length-1){
+                      bottom_docu =true;
+                  }else{
+                      center_docu=true;
+                  }
+              }else{
+                  if(this.itemData.open){
+                      if(this.index==0){
+                          roots_open=true;
+                      }else if(this.index==this.length-1){
+                          bottom_open =true;
+                      }else{
+                          center_open=true;
+                      }
+                  }else{
+                      if(this.index==0){
+                          roots_close=true;
+                      }else if(this.index==this.length-1){
+                          center_close =true;
+                      }else{
+                          bottom_close=true;
+                      }
+                  }
+              }
+
+              return{
+                  "roots_open":roots_open,
+                  "center_open":center_open,
+                  "bottom_open":bottom_open,
+                  "roots_close":roots_close,
+                  "center_close":center_close,
+                  "bottom_close":bottom_close,
+                  "center_docu":center_docu,
+                  "bottom_docu":bottom_docu
+              };
+          },
+          hasChildren:function(){
+              console.log(this.itemData+":"+this.index+":"+this.length);
+              if(this.itemData.children){
+                  return this.itemData.children.length>0;
+              }
+              return false;
+          }
+      }
+
+    });
+
     var zNodes = [
         {
             name: "test1", open: true, children: [
@@ -79,67 +134,18 @@
         },
         {
             name: "test2", open: true, children: [
-            {name: "test2_1"}, {name: "test2_2"}]
+            {name: "test2_1"}, {name: "test2_2",open:false, children: [{name:"test2_2_1"},{name:"test2_2_2"}]}]
+        },
+        {
+            name: "test3"
         }
     ];
     var app = new Vue({
+        el:'#app',
         data:{
             zNodes:zNodes
         },
-        methods:{
-            getClassSwitch:function(treeItem,index,length){
-                var roots_open=false;
-                var center_open=false;
-                var bottom_open=false;
-                var roots_close=false;
-                var center_close=false;
-                var bottom_close=false;
-                var center_docu=false;
-                var bottom_docu=false;
-               if(isLeaf(treeItem)){
-                   if(index==length-1){
-                       bottom_docu =true;
-                   }else{
-                       center_docu=true;
-                   }
-               }else{
-                   if(treeItem.open){
-                       if(index==0){
-                           roots_open=true;
-                       }else if(index==length-1){
-                           bottom_open =true;
-                       }else{
-                           center_open=true;
-                       }
-                   }else{
-                       if(index==0){
-                           roots_close=true;
-                       }else if(index==length-1){
-                           center_close =true;
-                       }else{
-                           bottom_close=true;
-                       }
-                   }
-               }
 
-                return{
-                    "roots_open":roots_open,
-                    "center_open":center_open,
-                    "bottom_open":bottom_open,
-                    "roots_close":roots_close,
-                    "center_close":center_close,
-                    "bottom_close":bottom_close,
-                    "center_docu":center_docu,
-                    "bottom_docu":bottom_docu
-                };
-            },
-            isLeaf:function(item){
-                if(item.children){
-                    return item.children.length>0
-                }
-                 return true;
-            }
-        }
     });
 
 </script>
