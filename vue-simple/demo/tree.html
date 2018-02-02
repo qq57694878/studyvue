@@ -12,7 +12,7 @@
 <body>
 <div id="app">
     <ul class="ztree">
-        <treeitem   v-for="(item,index) in zNodes"  :item-data="item" :index="index" :length="zNodes.length"></treeitem>
+        <treeitem   v-for="(item,index) in zNodes"  :item-data="item" :index="index" :length="zNodes.length" @click-item="clickItem" :level="0"></treeitem>
     </ul>
 
 
@@ -21,13 +21,13 @@
 
 <script type="text/x-template" id="treeItemTemplate">
     <li>
-        <span id="treeDemo_1_switch" class="button switch " :class="getClassSwitch()" @click="switchOpen()"></span>
-        <a id="treeDemo_1_a" target="_blank">
+        <span id="treeDemo_1_switch" class="button switch " :class="getClassSwitch()" @click.stop="switchOpen"></span>
+        <a id="treeDemo_1_a" target="_blank" @click.stop="clickItem">
             <span id="treeDemo_1_ico" class="button " :class="getClassIco()"></span>
             <span id="treeDemo_1_span" class="node_name">{{itemData.name}}</span>
         </a>
         <ul id="treeDemo_1_ul" :class="{line:hasLine()}"  v-show="itemData.open" v-if="hasChildren()">
-            <treeitem   v-for="(item,index) in itemData.children"  :item-data="item" :index="index" :length="itemData.children.length"></treeitem>
+            <treeitem   v-for="(item,index) in itemData.children"  :item-data="item" :index="index" :length="itemData.children.length" :level="mylevel"></treeitem>
         </ul>
     </li>
 </script>
@@ -37,8 +37,26 @@
 
     Vue.component('treeitem',{
        template:'#treeItemTemplate',
-        props:["itemData","index","length"],
+        props:["itemData","index","length","level"],
+        data:function(){
+           return {
+               mylevel:this.level+1
+           }
+        },
       methods:{
+            getRoot(){
+                var root = this;
+                for(var i=1;i<this.mylevel;i++){
+                    root = root.$parent
+                }
+                console.log(root);
+                return root;
+            },
+          clickItem:function(){
+              console.log(JSON.stringify(this.itemData)+"this.index:"+this.index+"this.level:"+this.mylevel);
+
+              this.getRoot().$emit("click-item",this.itemData,this.index,this.length);
+          },
            switchOpen:function(){
                if(this.itemData.open){
                    this.itemData.open=false;
@@ -145,6 +163,11 @@
         data:{
             zNodes:zNodes
         },
+        methods:{
+            clickItem:function(itemData,index,length){
+                console.log("parent:"+JSON.stringify(itemData)+"index:"+index+"length:"+length);
+            }
+        }
 
     });
 
