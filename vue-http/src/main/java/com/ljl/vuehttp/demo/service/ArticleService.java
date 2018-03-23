@@ -22,16 +22,18 @@ import java.util.List;
 public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
-    public Page<Article> findArticleByTitle(String title,Pageable pageRequest){
-        Sort sort = new Sort(Sort.Direction.ASC,"id");
+    public Page<Article> findArticleByTitle(String word,Pageable pageRequest){
+        Sort sort = new Sort(Sort.Direction.DESC,"id");
         Pageable pageable = new PageRequest(pageRequest.getPageNumber(),pageRequest.getPageSize(),sort);
 /*        return articleRepository.findAll(pageable);*/
         Page<Article> page  =articleRepository.findAll(new Specification<Article>() {
             @Override
             public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates= new ArrayList<Predicate>();
-                if(title!=null&&title.length()>0){
-                    Predicate p = criteriaBuilder.like(root.get("title"),"%" + title + "%");
+                if(word!=null&&word.length()>0){
+                    Predicate p1 = criteriaBuilder.like(root.get("title"),"%" + word + "%");
+                    Predicate p2 = criteriaBuilder.like(root.get("content"),"%" + word + "%");
+                    Predicate p = criteriaBuilder.or(p1,p2);
                     predicates.add(p);
                 }
 

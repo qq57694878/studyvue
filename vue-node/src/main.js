@@ -7,10 +7,10 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss'
 import VueResource from 'vue-resource'
-import { getToken,removeToken } from '@/utils/auth' // getToken from cookie
+import { getToken,removeToken } from '@/utils/auth' // getToken from
 import './permission' // permission control
 import './icons'
-import '@/utils/dateutil.js' // getToken from cookie
+import '@/utils/dateutil.js' // getToken from
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(VueResource)

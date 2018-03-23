@@ -130,6 +130,7 @@
         this.search(requestBody);
       },
       handleCurrentChange(val) {
+        console.log("执行了分页："+val);
         console.log(`当前页: ${val}`);
         this.page.pageNum=val;
         var requestBody={ pageNum:val,pageSize:this.page.pageSize,word:this.word};

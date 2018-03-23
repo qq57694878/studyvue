@@ -1,28 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import HelloWorld from '@/components/HelloWorld'
 import Hello from '@/components/Hello'
-import Grid from '@/components/Grid'
-import Login from '@/components/Login'
+import World from '@/components/World'
 Vue.use(Router)
 
 export default new Router({
   routes: [
-
     {
       path: '/',
-      name: 'Grid',
-      component: Grid
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
+      name: 'HelloWorld',
+      component: HelloWorld
     },
     {
       path: '/hello',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/world',
+      name: 'World',
+      component: World
     }
   ]
 })
